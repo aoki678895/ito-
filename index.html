@@ -23,7 +23,7 @@
 </head>
 <body>
 
-  <h1>itoしよ</h1>
+  <h1>ito</h1>
 
   <!-- 人数選択画面 -->
   <div id="step1">
@@ -41,7 +41,8 @@
 
   <!-- 数字表示画面 -->
   <div id="step3" style="display:none;">
-    <div id="numberDisplay" onclick="nextPerson()">ここに数字が表示されます</div>
+    <div id="numberDisplay">ここに数字が表示されます</div>
+    <button onclick="nextPerson()">次へ</button>
   </div>
 
   <!-- ゲーム終了画面 -->
@@ -50,6 +51,7 @@
     <p id="resetMessage"></p>
     <p>現在のゲームセット数: <span id="gameCount">1</span></p>
     <button id="resetButton" style="display:none;" onclick="resetGame()">もう一度</button>
+    <button id="nextGameButton" style="display:none;" onclick="startNextGame()">次のゲームへ</button>
   </div>
 
   <script>
@@ -125,15 +127,18 @@
       const remainingNumbers = numbers.length; // 残っている数字の数
       const resetMessage = document.getElementById('resetMessage');
       const resetButton = document.getElementById('resetButton');
+      const nextGameButton = document.getElementById('nextGameButton');
 
       if (remainingNumbers >= totalPeople) {
         // 十分な数字が残っている場合
-        resetMessage.innerText = `まだ ${remainingNumbers} 個の数字が残っています次のゲームがプレイできます。`;
+        resetMessage.innerText = `まだ ${remainingNumbers} 個の数字が残っています。もう一度プレイできます。`;
         resetButton.style.display = 'none'; // リセットボタンを表示しない
+        nextGameButton.style.display = 'block'; // 次のゲームボタンを表示
       } else {
         // 残りの数字が不足している場合
         resetMessage.innerText = `残りの数字が足りません。リセットして新しいゲームを始めてください。`;
         resetButton.style.display = 'block'; // リセットボタンを表示
+        nextGameButton.style.display = 'none'; // 次のゲームボタンを非表示
       }
     }
 
@@ -144,7 +149,17 @@
       currentPersonIndex = 0;
       gameCount++; // ゲームセット数をカウント
 
-      // ステップ4からステップ2へ（人数選択画面を再表示）
+      // ステップ4からステップ1へ（人数選択画面を再表示）
+      document.getElementById('step4').style.display = 'none';
+      document.getElementById('step1').style.display = 'block';
+    }
+
+    // 次のゲームを開始
+    function startNextGame() {
+      numbers = generateNumbers(); // 数字セットをリセット
+      currentPersonIndex = 0; // 現在の人のインデックスをリセット
+
+      // ステップ4からステップ2へ（待機画面に遷移）
       document.getElementById('step4').style.display = 'none';
       document.getElementById('step2').style.display = 'block';
       updatePerson();
