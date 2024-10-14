@@ -14,6 +14,10 @@
       font-size: 48px;
       margin: 20px 0;
     }
+    #unusedNumbers {
+      font-size: 18px;
+      margin: 20px 0;
+    }
     button {
       padding: 10px 20px;
       font-size: 20px;
@@ -48,7 +52,15 @@
   <!-- ゲーム終了画面 -->
   <div id="step4" style="display:none;">
     <h2>全員の数字表示が完了しました！</h2>
+    <p>数字のセットをリセットしました。もう一度遊びますか？</p>
+    <p>現在のゲームセット数: <span id="gameCount">1</span></p>
     <button onclick="resetGame()">もう一度</button>
+  </div>
+
+  <!-- 使用していない数字の表示 -->
+  <div id="unusedNumbers" style="display:none;">
+    <h3>使用していない数字:</h3>
+    <div id="unusedNumbersList"></div>
   </div>
 
   <script>
@@ -61,6 +73,7 @@
     let numbers = generateNumbers();
     let totalPeople = 0;
     let currentPersonIndex = 0;
+    let gameCount = 1; // ゲームセット数
 
     // ゲーム開始時に人数を設定
     function startGame() {
@@ -71,6 +84,7 @@
       document.getElementById('step1').style.display = 'none';
       document.getElementById('step2').style.display = 'block';
       updatePerson();
+      updateUnusedNumbers(); // 使用していない数字を表示
     }
 
     // 現在の人の順番を表示
@@ -106,23 +120,35 @@
         // 全員が終了したら、終了画面へ
         document.getElementById('step3').style.display = 'none';
         document.getElementById('step4').style.display = 'block';
+        document.getElementById('gameCount').innerText = gameCount; // ゲームセット数を表示
       } else {
         // 次の人に進む
         document.getElementById('step3').style.display = 'none';
         document.getElementById('step2').style.display = 'block';
         updatePerson();
       }
+
+      updateUnusedNumbers(); // 使用していない数字を更新
+    }
+
+    // 使用していない数字を表示
+    function updateUnusedNumbers() {
+      const unusedNumbersList = document.getElementById('unusedNumbersList');
+      unusedNumbersList.innerText = numbers.join(', ');
+      document.getElementById('unusedNumbers').style.display = 'block';
     }
 
     // ゲームをリセット
     function resetGame() {
-      numbers = generateNumbers();
+      numbers = generateNumbers(); // 数字セットをリセット
       totalPeople = 0;
       currentPersonIndex = 0;
+      gameCount++; // ゲームセット数をカウント
 
       // ステップ4からステップ1へ
       document.getElementById('step4').style.display = 'none';
       document.getElementById('step1').style.display = 'block';
+      updateUnusedNumbers(); // 使用していない数字を更新
     }
   </script>
 
