@@ -60,8 +60,7 @@
     }
 
     // 初期化
-    let numbers = generateNumbers();
-    let usedNumbers = []; // 使用済み数字を保存する配列
+    let numbers = generateNumbers(); // 未使用の数字リスト
     let totalPeople = 0;
     let currentPersonIndex = 0;
     let gameCount = 1; // ゲームセット数
@@ -93,9 +92,8 @@
       const randomIndex = Math.floor(Math.random() * numbers.length);
       const selectedNumber = numbers[randomIndex];
 
-      // 選ばれた数字をリストから削除し、使用済みの配列に追加
-      numbers.splice(randomIndex, 1);  
-      usedNumbers.push(selectedNumber); 
+      // 選ばれた数字をリストから削除
+      numbers.splice(randomIndex, 1);
 
       // 数字を画面に表示
       document.getElementById('numberDisplay').innerText = selectedNumber;
@@ -125,7 +123,7 @@
 
     // リセット条件を確認
     function checkResetCondition() {
-      const remainingNumbers = 100 - usedNumbers.length; // 残っている数字の数
+      const remainingNumbers = numbers.length; // 残っている数字の数
       const resetMessage = document.getElementById('resetMessage');
       const resetButton = document.getElementById('resetButton');
 
@@ -143,7 +141,6 @@
     // ゲームをリセット
     function resetGame() {
       numbers = generateNumbers(); // 数字セットをリセット
-      usedNumbers = []; // 使用済み数字をクリア
       totalPeople = 0;
       currentPersonIndex = 0;
       gameCount++; // ゲームセット数をカウント
