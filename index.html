@@ -14,10 +14,6 @@
       font-size: 48px;
       margin: 20px 0;
     }
-    #unusedNumbers {
-      font-size: 18px;
-      margin: 20px 0;
-    }
     button {
       padding: 10px 20px;
       font-size: 20px;
@@ -57,12 +53,6 @@
     <button onclick="resetGame()">もう一度</button>
   </div>
 
-  <!-- 使用していない数字の表示 -->
-  <div id="unusedNumbers" style="display:none;">
-    <h3>使用していない数字:</h3>
-    <div id="unusedNumbersList"></div>
-  </div>
-
   <script>
     // 1〜100の配列を作成する関数
     function generateNumbers() {
@@ -84,7 +74,6 @@
       document.getElementById('step1').style.display = 'none';
       document.getElementById('step2').style.display = 'block';
       updatePerson();
-      updateUnusedNumbers(); // 使用していない数字を表示
     }
 
     // 現在の人の順番を表示
@@ -127,15 +116,6 @@
         document.getElementById('step2').style.display = 'block';
         updatePerson();
       }
-
-      updateUnusedNumbers(); // 使用していない数字を更新
-    }
-
-    // 使用していない数字を表示
-    function updateUnusedNumbers() {
-      const unusedNumbersList = document.getElementById('unusedNumbersList');
-      unusedNumbersList.innerText = numbers.join(', ');
-      document.getElementById('unusedNumbers').style.display = 'block';
     }
 
     // ゲームをリセット
@@ -148,7 +128,6 @@
       // ステップ4からステップ1へ
       document.getElementById('step4').style.display = 'none';
       document.getElementById('step1').style.display = 'block';
-      updateUnusedNumbers(); // 使用していない数字を更新
     }
   </script>
 
