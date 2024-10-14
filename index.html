@@ -41,8 +41,7 @@
 
   <!-- 数字表示画面 -->
   <div id="step3" style="display:none;">
-    <div id="numberDisplay">ここに数字が表示されます</div>
-    <button onclick="nextPerson()">次へ</button>
+    <div id="numberDisplay" onclick="nextPerson()">ここに数字が表示されます</div>
   </div>
 
   <!-- ゲーム終了画面 -->
@@ -141,13 +140,14 @@
     // ゲームをリセット
     function resetGame() {
       numbers = generateNumbers(); // 数字セットをリセット
-      totalPeople = 0;
+      totalPeople = parseInt(document.getElementById('peopleCount').value); // 前回の人数を引き継ぐ
       currentPersonIndex = 0;
       gameCount++; // ゲームセット数をカウント
 
-      // ステップ4からステップ1へ
+      // ステップ4からステップ2へ（人数選択画面を再表示）
       document.getElementById('step4').style.display = 'none';
-      document.getElementById('step1').style.display = 'block';
+      document.getElementById('step2').style.display = 'block';
+      updatePerson();
     }
   </script>
 
