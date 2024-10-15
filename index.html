@@ -77,22 +77,26 @@
       updatePerson();
     }
 
-    // 次のゲームを開始（リセットが必要な場合のみ数字をリセット）
-    function startNextGame() {
-      currentPersonIndex = 0; // 現在の人のインデックスをリセット
+// 次のゲームを開始（リセットが必要な場合のみ数字をリセット）
+function startNextGame() {
+  currentPersonIndex = 0; // 現在の人のインデックスをリセット
 
-      // 十分な数字が残っているかチェック
-      if (numbers.length < totalPeople) {
-        // 残りの数字が足りない場合のみ数字リストをリセット
-        numbers = generateNumbers();
-        alert('数字が足りないため、新しいセットでゲームを再開します。');
-      }
+  // 十分な数字が残っているかチェック
+  if (numbers.length < totalPeople) {
+    // 残りの数字が足りない場合のみ数字リストをリセット
+    numbers = generateNumbers();
+    alert('数字が足りないため、新しいセットでゲームを再開します。');
+  }
 
-      // ステップ4からステップ2へ（待機画面に遷移）
-      document.getElementById('step4').style.display = 'none';
-      document.getElementById('step2').style.display = 'block';
-      updatePerson();
-    }
+  // ゲームセット数をインクリメント
+  gameCount++;
+  document.getElementById('gameCount').innerText = gameCount; // 更新
+
+  // ステップ4からステップ2へ（待機画面に遷移）
+  document.getElementById('step4').style.display = 'none';
+  document.getElementById('step2').style.display = 'block';
+  updatePerson();
+}
 
     // リセット条件を確認（数字が足りない場合のみリセット）
     function checkResetCondition() {
