@@ -60,16 +60,14 @@
       return Array.from({length: 100}, (_, i) => i + 1);
     }
 
-
-
-    // ゲーム開始時に人数を設定
-    function startGame() {
     // 初期化
     let numbers = generateNumbers(); // 未使用の数字リスト
     let totalPeople = 0;
     let currentPersonIndex = 0;
     let gameCount = 1; // ゲームセット数
-      
+
+    // ゲーム開始時に人数を設定
+    function startGame() {
       totalPeople = parseInt(document.getElementById('peopleCount').value);
       currentPersonIndex = 0;
 
