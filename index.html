@@ -13,13 +13,52 @@
     #numberDisplay {
       font-size: 48px;
       margin: 20px 0;
+      width: 150px;
+      height: 200px;
+      line-height: 200px;
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      display: inline-block;
+      perspective: 1000px; /* 3D視点効果 */
+    }
+    .card {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+    .flipped .card {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 10px;
+    }
+    .card-front {
+      background-color: #f8f9fa;
+      font-size: 24px;
+      color: #333;
+    }
+    .card-back {
+      background-color: #007bff;
+      color: white;
+      font-size: 48px;
+      transform: rotateY(180deg);
     }
     button {
       padding: 10px 20px;
       font-size: 20px;
       margin: 5px;
     }
-        #resetButton, #nextGameButton {
+    #resetButton, #nextGameButton {
       display: block; /* ボタンをブロック要素にして縦に並べる */
       margin: 10px auto; /* 中央に配置 */
       width: 200px; /* 幅を指定（必要に応じて変更可能） */
@@ -46,7 +85,12 @@
 
   <!-- 数字表示画面 -->
   <div id="step3" style="display:none;">
-    <div id="numberDisplay">ここに数字が表示されます</div>
+    <div id="numberDisplay" class="card-container" onclick="flipCard()">
+      <div class="card">
+        <div class="card-front">カードをめくってください</div>
+        <div class="card-back" id="numberValue">0</div>
+      </div>
+    </div>
     <button onclick="nextPerson()">次へ</button>
   </div>
 
@@ -82,65 +126,12 @@
       updatePerson();
     }
 
-// 次のゲームを開始（リセットが必要な場合のみ数字をリセット）
-function startNextGame() {
-  currentPersonIndex = 0; // 現在の人のインデックスをリセット
-
-  // 十分な数字が残っているかチェック
-  if (numbers.length < totalPeople) {
-    // 残りの数字が足りない場合のみ数字リストをリセット
-    numbers = generateNumbers();
-    alert('数字が足りないため、新しいセットでゲームを再開します。');
-  }
-
-  // ゲームセット数をインクリメント
-  gameCount++;
-  document.getElementById('gameCount').innerText = gameCount; // 更新
-
-  // ステップ4からステップ2へ（待機画面に遷移）
-  document.getElementById('step4').style.display = 'none';
-  document.getElementById('step2').style.display = 'block';
-  updatePerson();
-}
-
-    // リセット条件を確認（数字が足りない場合のみリセット）
-    function checkResetCondition() {
-      const remainingNumbers = numbers.length; // 残っている数字の数
-      const resetMessage = document.getElementById('resetMessage');
-      const resetButton = document.getElementById('resetButton');
-      const nextGameButton = document.getElementById('nextGameButton');
-
-      if (remainingNumbers >= totalPeople) {
-        // 十分な数字が残っている場合
-        resetMessage.innerText = `まだ ${remainingNumbers} 個の数字が残っています。もう一度プレイできます。`;
-        resetButton.style.display = 'none'; // リセットボタンを表示しない
-        nextGameButton.style.display = 'block'; // 次のゲームボタンを表示
-      } else {
-        // 残りの数字が不足している場合
-        resetMessage.innerText = `残りの数字が足りません。リセットして新しいゲームを始めてください。`;
-        resetButton.style.display = 'block'; // リセットボタンを表示
-        nextGameButton.style.display = 'none'; // 次のゲームボタンを非表示
-      }
-    }
-
-    // ゲームをリセット
-    function resetGame() {
-      numbers = generateNumbers(); // 数字セットをリセット
-      totalPeople = parseInt(document.getElementById('peopleCount').value); // 前回の人数を引き継ぐ
-      currentPersonIndex = 0;
-      gameCount++; // ゲームセット数をカウント
-
-      // ステップ4からステップ1へ（人数選択画面を再表示）
-      document.getElementById('step4').style.display = 'none';
-      document.getElementById('step1').style.display = 'block';
-    }
-
-    // 現在の人の順番を表示
+    // 次の人の順番を表示
     function updatePerson() {
       document.getElementById('currentPerson').innerText = `第 ${currentPersonIndex + 1} 人目の番です。`;
     }
 
-    // ランダムな数字を取得し、表示画面に遷移
+    // ランダムな数字を取得し、カードの裏に表示する
     function showNumber() {
       if (numbers.length === 0) {
         alert('全ての数字が表示されました');
@@ -154,23 +145,28 @@ function startNextGame() {
       // 選ばれた数字をリストから削除
       numbers.splice(randomIndex, 1);
 
-      // 数字を画面に表示
-      document.getElementById('numberDisplay').innerText = selectedNumber;
+      // 数字をカードの裏に設定
+      document.getElementById('numberValue').innerText = selectedNumber;
 
       // ステップ2からステップ3へ
       document.getElementById('step2').style.display = 'none';
       document.getElementById('step3').style.display = 'block';
     }
 
+    // カードをめくる（フリップ効果）
+    function flipCard() {
+      document.getElementById('numberDisplay').classList.toggle('flipped');
+    }
+
     // 次の人に進む
     function nextPerson() {
       currentPersonIndex++;
+      document.getElementById('numberDisplay').classList.remove('flipped'); // カードを元に戻す
 
       if (currentPersonIndex >= totalPeople) {
         // 全員が終了したら、終了画面へ
         document.getElementById('step3').style.display = 'none';
         document.getElementById('step4').style.display = 'block';
-        document.getElementById('gameCount').innerText = gameCount; // ゲームセット数を表示
         checkResetCondition(); // ゲーム終了時にリセット条件を確認
       } else {
         // 次の人に進む
@@ -178,6 +174,36 @@ function startNextGame() {
         document.getElementById('step2').style.display = 'block';
         updatePerson();
       }
+    }
+
+    // リセット条件を確認（数字が足りない場合のみリセット）
+    function checkResetCondition() {
+      const remainingNumbers = numbers.length;
+      const resetMessage = document.getElementById('resetMessage');
+      const resetButton = document.getElementById('resetButton');
+      const nextGameButton = document.getElementById('nextGameButton');
+
+      if (remainingNumbers >= totalPeople) {
+        resetMessage.innerText = `まだ ${remainingNumbers} 個の数字が残っています。もう一度プレイできます。`;
+        resetButton.style.display = 'none';
+        nextGameButton.style.display = 'block';
+      } else {
+        resetMessage.innerText = `残りの数字が足りません。リセットして新しいゲームを始めてください。`;
+        resetButton.style.display = 'block';
+        nextGameButton.style.display = 'none';
+      }
+    }
+
+    // ゲームをリセット
+    function resetGame() {
+      numbers = generateNumbers(); // 数字セットをリセット
+      currentPersonIndex = 0;
+      gameCount++;
+      document.getElementById('gameCount').innerText = gameCount; // ゲームセット数を表示
+
+      // ステップ4からステップ1へ
+      document.getElementById('step4').style.display = 'none';
+      document.getElementById('step1').style.display = 'block';
     }
   </script>
 
