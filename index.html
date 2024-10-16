@@ -28,7 +28,7 @@
 </head>
 <body>
 
-  <h1>ito</h1>
+  <h1>itoしよ</h1>
 
   <!-- 人数選択画面 -->
   <div id="step1">
@@ -40,8 +40,8 @@
   <!-- 待機画面 -->
   <div id="step2" style="display:none;">
     <h2 id="currentPerson"></h2>
-    <p>準備ができたら、ボタンを押してください。</p>
-    <button onclick="showNumber()">数字を表示</button>
+    <p>準備ができたら、カードを引いてください。</p>
+    <button onclick="showNumber()">カードを引く</button>
   </div>
 
   <!-- 数字表示画面 -->
@@ -137,7 +137,7 @@ function startNextGame() {
 
     // 現在の人の順番を表示
     function updatePerson() {
-      document.getElementById('currentPerson').innerText = `第 ${currentPersonIndex + 1} 人目の番です。`;
+      document.getElementById('currentPerson').innerText = ` ${currentPersonIndex + 1} 人目の番です。`;
     }
 
     // ランダムな数字を取得し、表示画面に遷移
